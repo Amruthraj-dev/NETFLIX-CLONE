@@ -13,14 +13,9 @@ const options = {
 };
 
 const requests = {
-  // nowPlaying: `https://api.themoviedb.org/3/movie/now_playing?api_key=${key}&language=en-US&page=1`,
-  // Popular: `https://api.themoviedb.org/3/movie/popular?api_key=${key}&language=en-US&page=1`,
-  // TopRated: `https://api.themoviedb.org/3/movie/top_rated?api_key=${key}&language=en-US&page=1`,
-  // Upcoming: `https://api.themoviedb.org/3/movie/upcoming?api_key=${key}&language=en-US&page=1`,
-
-  nowPlaying: "http://localhost:300/results",
-  Popular: "http://localhost:400/results",
-  TopRated: "http://localhost:500/results",
-  Upcoming: "http://localhost:600/results",
+  nowPlaying: "https://netflix-api-collections.onrender.com/nowplaying",
+  Popular: "https://netflix-api-collections.onrender.com/popular",
+  TopRated: "https://netflix-api-collections.onrender.com/topRated",
+  Upcoming: "https://netflix-api-collections.onrender.com/upcoming",
 };
 export default requests;

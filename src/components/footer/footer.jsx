@@ -17,8 +17,8 @@ const NetflixFooter = () => {
                rounded-sm h-[40px] sm:h-[10px] "
               placeholder="Email address"
             />
-            <button className="bg-red-600 text-white px-6 py-2 rounded-sm sm:text-1xl px-2 py-0  text-1.5xl">
-              Get Started
+            <button className="bg-red-600 text-white px-6 py-2 rounded-sm text-lg xs:text-xl sm:text-lg md:text-xl">
+              GetStarted
             </button>
           </div>
         </div>

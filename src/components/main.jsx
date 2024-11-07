@@ -9,9 +9,7 @@ const Main = () => {
     const fetchdata = async () => {
       try {
         const response = await axios.get(requests.Popular);
-        const result = await response.data;
-        console.log(result);
-        console.log(response.data.results);
+        const result = await response.data.results;
         setmovies(result);
       } catch (e) {
         console.error(e, "error");
