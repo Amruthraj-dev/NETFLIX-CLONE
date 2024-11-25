@@ -13,12 +13,12 @@ const NetflixFooter = () => {
           <div className="flex justify-center items-center space-x-2">
             <input
               type="email"
-              className="px-4 py-2 w-[400px] text-white bg-black border-[1px]
-               rounded-sm h-[40px] sm:h-[10px] "
+              className="px-2 py-1 w-[200px] sm:w-[400px] text-white bg-black border-[1px] rounded-sm h-[30px] sm:h-[40px]"
               placeholder="Email address"
             />
-            <button className="bg-red-600 text-white px-6 py-2 rounded-sm text-lg xs:text-xl sm:text-lg md:text-xl">
-              GetStarted
+
+            <button className="bg-red-600 text-white px-4 py-1 sm:px-6 sm:py-2 rounded-sm text-lg xs:text-base sm:text-xl md:text-2xl">
+              Get Started
             </button>
           </div>
         </div>
@@ -26,7 +26,7 @@ const NetflixFooter = () => {
         <div className="text-gray-400 mt-8 mb-8">
           <span
             href="tel:000-800-919-1694"
-            className="text-gray-400 underline cursor-pointer    hover:text-white"
+            className="text-gray-400 underline cursor-pointer  hover:text-white"
           >
             Questions? Call 000-800-919-1694
           </span>

@@ -8,10 +8,13 @@ import SignUp from "./pages/SignUp";
 import Account from "./pages/Account";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { motion } from "framer-motion";
+import Player from "./components/player";
+// import MovieCarousel from "./components/carousel/carousel";
 
 function App() {
   return (
     <>
+      {/* <MovieCarousel /> */}
       <AuthContextProvider>
         <Navbar />
         <Routes>
@@ -26,8 +29,8 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/player/:id" element={<Player/>} />
         </Routes>
-        
       </AuthContextProvider>
     </>
   );

@@ -34,20 +34,18 @@ const Movie = ({ item }) => {
 
   return (
     <div className="w-[160px] sm:w-[200px] md:w-[240px] lg:w-[280px] inline-block cursor-pointer relative p-2">
-      <motion.img
-        whileHover={{ scale: 1.1 }}
-        onHoverStart={(e) => {}}
-        onHoverEnd={(e) => {}}
-        className="w-full h-auto block"
-        src={`https://image.tmdb.org/t/p/original${item?.backdrop_path}`}
-        alt={item?.title}
-      />
-      {/* <div
-        // whileHover={{ scale: 1.2 }}
-        // onHoverStart={(e) => {}}
-        // onHoverEnd={(e) => {}}
-        className="absolute top-0 left-0 w-full h-full bg-black/80 opacity-0 hover:opacity-100 text-white"
-      ></div> */}
+      <div className="relative overflow-hidden w-[160px] sm:w-[200px] md:w-[240px] lg:w-[280px] inline-block cursor-pointer p-2">
+        <motion.img
+          whileHover={{ scale: 1.4 }}
+          onHoverStart={(e) => {}}
+          onHoverEnd={(e) => {}}
+          className="w-full h-auto block"
+          src={`https://image.tmdb.org/t/p/original${item?.backdrop_path}`}
+          alt={item?.title}
+        />
+      </div>
+
+      
       <p className="text-xs md:text-sm font-bold flex justify-center items-center absolute bottom-4 left-0 right-0 text-center text-white">
         {item?.title}
       </p>

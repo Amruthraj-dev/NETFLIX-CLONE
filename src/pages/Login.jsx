@@ -1,26 +1,34 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
+import netflix_spinner from "../assets/netflix_spinner.gif";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const { logIn } = UserAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     setError(""); // Clear any previous errors
     try {
       await logIn(email, password);
       navigate("/"); // Navigate to home page on successful login
     } catch (err) {
-      setError(err.message); // Set the error message to be displayed in the UI
+      setError(err.message.split("/")[1].split("-").join(" ")); // Set the error message to be displayed in the UI
     }
+    setLoading(false);
   };
 
-  return (
+  return loading ? (
+    <div className="w-full h-[100vh] flex justify-center items-center ">
+      <img className="w-[60px] " src={netflix_spinner} alt="loading..." />{" "}
+    </div>
+  ) : (
     <div>
       <div className="w-full h-screen">
         <img
@@ -80,4 +88,3 @@ const Login = () => {
 };
 
 export default Login;
-  

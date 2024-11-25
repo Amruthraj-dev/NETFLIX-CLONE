@@ -1,26 +1,40 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
+import netflix_spinner from "../assets/netflix_spinner.gif";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(""); // State to store error messages
-  const { signUp } = UserAuth();
+  const { signUp,loading,setLoading } = UserAuth();
   const navigate = useNavigate();
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Clear any previous errors
-    try {
-      await signUp(email, password);
-      navigate("/");
-    } catch (error) {
-      setError(error.message); // Display error message in UI
+    setLoading(true)
+    if (password.length >= 8) {
+      setError(""); // Clear any previous errors
+
+      try {
+        await signUp(email, password);
+        navigate("/");
+      } catch (error) {
+        setError(error.message); // Display error message in UI
+      }
+
+    } else {
+      setError("Password length should be at least 8 characters");
     }
+    setLoading(false)
   };
 
-  return (
+  return (loading ? (
+    <div className="w-full h-[100vh] flex justify-center items-center ">
+      <img className="w-[60px] " src={netflix_spinner} alt="loading..." />{" "}
+    </div>
+  ) : 
     <div className="w-full h-screen">
       <img
         className="hidden sm:block absolute w-full h-full object-cover"

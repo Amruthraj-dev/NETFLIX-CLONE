@@ -4,7 +4,7 @@ import { UserAuth } from "../context/AuthContext";
 import { db } from "../firebase";
 import { updateDoc, doc, onSnapshot } from "firebase/firestore";
 import { AiOutlineClose } from "react-icons/ai";
-import NetflixFooter from "./footer/footer";
+import { motion } from "framer-motion";
 
 const SavedShows = () => {
   const [movies, setMovies] = useState([]);
@@ -42,6 +42,7 @@ const SavedShows = () => {
   return (
     <>
       <h2 className="text-white font-bold md:text-xl p-4">My Shows</h2>
+
       <div className="relative flex items-center group">
         <MdChevronLeft
           size={40}
@@ -58,13 +59,16 @@ const SavedShows = () => {
               key={id}
               className="w-[160px] sm:w-[200px] md:w-[240px] lg:w-[280px] inline-block cursor-pointer relative p-2"
             >
-              <img
-                className="w-full h-auto block"
-                src={`https://image.tmdb.org/t/p/w500/${item?.img}`}
-                alt={item.title}
-              />
-              {/* Hover effect only applies to the background */}
-              <div className="absolute top-0 left-0 w-full h-full bg-black/80 opacity-0 hover:opacity-100"></div>
+              <div className="relative overflow-hidden w-[160px] sm:w-[200px] md:w-[240px] lg:w-[280px] inline-block cursor-pointer p-2">
+                <motion.img
+                  whileHover={{ scale: 1.4 }}
+                  onHoverStart={(e) => {}}
+                  onHoverEnd={(e) => {}}
+                  className="w-full h-auto block"
+                  src={`https://image.tmdb.org/t/p/w500/${item?.img}`}
+                  alt={item?.title}
+                />
+              </div>
 
               {/* Title is positioned at the bottom of the image and is always visible */}
               <p className="whitespace-normal text-xs md:text-sm font-bold flex justify-center items-center absolute bottom-0 left-0 right-0 text-center text-white bg-black/70">

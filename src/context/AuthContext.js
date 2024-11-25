@@ -3,10 +3,14 @@ import {auth,db} from "../firebase"
 import {createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged} from "firebase/auth"
 import {setDoc,doc} from "firebase/firestore"
 
+
+
+
 const AuthContext=createContext()
 
 export function AuthContextProvider({children}){
-
+    
+    const [loading,setLoading]=useState(false)
     const [user,setUser]=useState({})
 
     function signUp(email,password){
@@ -32,7 +36,7 @@ export function AuthContextProvider({children}){
       
 
     return (
-        <AuthContext.Provider value={{signUp,logIn,logOut,user}}>
+        <AuthContext.Provider value={{signUp,logIn,logOut,user,loading,setLoading}}>
             {children}
         </AuthContext.Provider>
     )
