@@ -15,7 +15,7 @@ const MovieCarousel = () => {
 
   useEffect(() => {
     startAutoplay();
-    return () => stopAutoplay(); // Cleanup on unmount
+    return () => stopAutoplay(); 
   }, []);
 
   const startAutoplay = () => {
@@ -23,18 +23,18 @@ const MovieCarousel = () => {
       setCurrentIndex((prevIndex) =>
         prevIndex === movies.length - 1 ? 0 : prevIndex + 1
       );
-    }, 3000); // Slide every 3 seconds
+    }, 3000); 
   };
 
   const stopAutoplay = () => {
     if (intervalRef.current) clearInterval(intervalRef.current);
   };
 
-  // Scroll carousel to the current movie
+  
   useEffect(() => {
     if (carouselRef.current) {
       carouselRef.current.scrollTo({
-        left: currentIndex * 320, // Adjust width to match card size + margin
+        left: currentIndex * 320, 
         behavior: "smooth",
       });
     }
@@ -65,7 +65,7 @@ const MovieCarousel = () => {
         ))}
       </div>
 
-      {/* Navigation buttons */}
+     
       <div className="absolute inset-y-0 flex items-center justify-between w-full px-2">
         <button
           onClick={() =>

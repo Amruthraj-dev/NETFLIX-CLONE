@@ -14,12 +14,12 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(""); // Clear any previous errors
+    setError("");
     try {
       await logIn(email, password);
-      navigate("/"); // Navigate to home page on successful login
+      navigate("/");
     } catch (err) {
-      setError(err.message.split("/")[1].split("-").join(" ")); // Set the error message to be displayed in the UI
+      setError(err.message.split("/")[1].split("-") .join(" ")); 
     }
     setLoading(false);
   };

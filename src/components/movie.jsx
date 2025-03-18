@@ -3,14 +3,15 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { UserAuth } from "../context/AuthContext";
 import { db } from "../firebase";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
-import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const Movie = ({ item }) => {
   const [like, setLike] = useState(false);
   const [saved, setSaved] = useState(false);
   const { user } = UserAuth();
 
-  const movieID = doc(db, "users", `${user?.email}`);
+  const movieID = user?.email ? doc(db, "users", user.email) : null;
+
 
   const saveShow = async () => {
     if (user?.email) {
@@ -33,19 +34,18 @@ const Movie = ({ item }) => {
   };
 
   return (
+    // <>
     <div className="w-[160px] sm:w-[200px] md:w-[240px] lg:w-[280px] inline-block cursor-pointer relative p-2">
       <div className="relative overflow-hidden w-[160px] sm:w-[200px] md:w-[240px] lg:w-[280px] inline-block cursor-pointer p-2">
-        <motion.img
-          whileHover={{ scale: 1.4 }}
-          onHoverStart={(e) => {}}
-          onHoverEnd={(e) => {}}
-          className="w-full h-auto block"
-          src={`https://image.tmdb.org/t/p/original${item?.backdrop_path}`}
-          alt={item?.title}
-        />
+        <Link to={`/player/${item.id}`}>
+          <img
+            className="w-full h-auto block"
+            src={`https://image.tmdb.org/t/p/original${item?.backdrop_path}`}
+            alt={item?.title}
+          />
+        </Link>
       </div>
 
-      
       <p className="text-xs md:text-sm font-bold flex justify-center items-center absolute bottom-4 left-0 right-0 text-center text-white">
         {item?.title}
       </p>
@@ -58,6 +58,7 @@ const Movie = ({ item }) => {
       </p>
     </div>
   );
+  // </>
 };
 
 export default Movie;

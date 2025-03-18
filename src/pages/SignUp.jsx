@@ -6,7 +6,7 @@ import netflix_spinner from "../assets/netflix_spinner.gif";
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(""); // State to store error messages
+  const [error, setError] = useState("");
   const { signUp,loading,setLoading } = UserAuth();
   const navigate = useNavigate();
 
@@ -15,13 +15,13 @@ const SignUp = () => {
     e.preventDefault();
     setLoading(true)
     if (password.length >= 8) {
-      setError(""); // Clear any previous errors
+      setError(""); 
 
       try {
         await signUp(email, password);
         navigate("/");
       } catch (error) {
-        setError(error.message); // Display error message in UI
+        setError(error.message); 
       }
 
     } else {
@@ -47,7 +47,6 @@ const SignUp = () => {
           <div className="max-w-[320px] mx-auto py-16">
             <h1 className="text-3xl font-bold">Sign Up</h1>
 
-            {/* Display the error message if any */}
             {error && <p className="p-3 bg-red-400 my-2">{error}</p>}
 
             <form onSubmit={handleSubmit} className="w-full flex flex-col py-4">

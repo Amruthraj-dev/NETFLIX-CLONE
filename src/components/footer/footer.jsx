@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-const NetflixFooter = () => {
-  // const [selectedValue, setSelectedValue] = useState("");
+const Footer = () => {
+
   return (
     <footer className="bg-black text-gray-400 py-10">
       <div className="max-w-full-lg mx-auto text-center">
@@ -97,4 +97,4 @@ const NetflixFooter = () => {
   );
 };
 
-export default NetflixFooter;
+export default Footer;
