@@ -13,6 +13,8 @@ export function AuthContextProvider({children}){
     const [loading,setLoading]=useState(false)
     const [user,setUser]=useState({})
 
+    const [likes, setLikes] = useState({});
+
     function signUp(email,password){
         createUserWithEmailAndPassword(auth,email,password)
         setDoc(doc(db,"users",email),{
@@ -24,9 +26,14 @@ export function AuthContextProvider({children}){
         return signInWithEmailAndPassword(auth,email,password)
     }
 
-    function logOut(){
-        return signOut(auth)
-    }
+    const logOut = async () => {
+  try {
+    setLikes({});
+    await signOut(auth);
+  } catch (error) {
+    console.error("Error logging out:", error);
+  }
+};
 
     useEffect(()=>{
         const unsubscribe=onAuthStateChanged(auth,(currentUser)=>
@@ -36,7 +43,7 @@ export function AuthContextProvider({children}){
       
 
     return (
-        <AuthContext.Provider value={{signUp,logIn,logOut,user,loading,setLoading}}>
+        <AuthContext.Provider value={{signUp,logIn,logOut,user,loading,likes,setLikes,setLoading}}>
             {children}
         </AuthContext.Provider>
     )

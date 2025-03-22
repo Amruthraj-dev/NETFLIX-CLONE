@@ -4,7 +4,7 @@ import axios from "axios";
 // import { BiMehAlt } from "react-icons/bi";
 
 const Main = () => {
-  const [movies, setmovies] = useState("");
+  const [movies, setmovies] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const carouselRef = useRef(null);
   const intervalRef = useRef(null);
@@ -40,7 +40,11 @@ const Main = () => {
       try {
         const response = await axios.get(requests.Popular);
         const result = await response.data.results;
-        setmovies(result);
+
+        const filteredMovies = result.filter(
+          (movie) => movie.backdrop_path !== ""
+        );
+        setmovies(filteredMovies);
         console.log(result, "movies");
       } catch (e) {
         console.error(e, "error");
@@ -64,9 +68,9 @@ const Main = () => {
     <>
       <div
         ref={carouselRef}
-        className="flex overflow-hidden scroll-smooth snap-x snap-mandatory space-x-4 "
+        className="flex overflow-hidden scroll-smooth snap-x snap-mandatory space-x-4 mb-8"
       >
-        <div className=" w-full h-[550px] text-white">
+        <div className="w-full h-[550px] text-white">
           <div className="w-full h-full">
             <div className="absolute w-full h-[550px] bg-gradient-to-r from-black"></div>
             <img
@@ -74,16 +78,15 @@ const Main = () => {
               src={`https://image.tmdb.org/t/p/original${movie?.backdrop_path}`}
               alt=""
             />
-
-            <div className="absolute w-full top-[30%] p-4 md:p-8">
+            <div className="absolute w-full top-[40%] md:top-[25%] lg:top-[25%] xl:top-[30%] p-4 md:p-6 lg:p-8">
               <h1 className="text-3xl md:text-5xl font-bold my-4">
                 {movie?.title}
               </h1>
               <p className="text-gray-400 text-sm">
                 Released : {movie?.release_date}
               </p>
-              <p className="w-full md:max-w-[70%] lg: max-w-[50%] xl:max-w-[35%] text-gray-200">
-                {truncate(movie?.overview, 150)}
+              <p className="hidden md:block w-full md:max-w-[70%]  lg:max-w-[50%] xl:max-w-[35%] text-gray-200">
+                {truncate(movie?.overview, 120)}
               </p>
               <div className="my-4">
                 <button className="border bg-gray-300 text-black border-gray-300 px-5 py-2">
@@ -96,7 +99,6 @@ const Main = () => {
             </div>
           </div>
         </div>
-       
       </div>
     </>
   );

@@ -8,7 +8,11 @@ const Rows = ({ title, fetchURL, rowID }) => {
 
   useEffect(() => {
     axios.get(fetchURL).then((response) => {
-      setmovies(response.data.results);
+      const result = response.data.results;
+      const filteredMovies = result.filter(
+        (movie) => movie.backdrop_path !== ""
+      );
+      setmovies(filteredMovies);
       console.log(movie, "req movies");
     });
   }, [fetchURL]);

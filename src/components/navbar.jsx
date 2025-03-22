@@ -3,25 +3,26 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
 import netflix_spinner from "../assets/netflix_spinner.gif";
 
-const Navbar = () => {
-  const { user, logOut, loading, setLoading } = UserAuth();
+const Navbar = () => {  
+  const { user, logOut,setLikes, loading, setLoading } = UserAuth();
   const navigate = useNavigate();
-
-  console.log(user);
 
   const handleLogout = async () => {
     try {
       setLoading(true);
+      setLikes({}); 
       await logOut();
       navigate("/");
     } catch (error) {
-      console.log(error);
+      console.error("Error during logout:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
+
   return loading ? (
     <div className="w-full h-[100vh] flex justify-center items-center ">
-      <img className="w-[60px] " src={netflix_spinner} alt="loading..." />{" "}
+      <img className="w-[60px] " src={netflix_spinner} alt="loading..." />
     </div>
   ) : (
     <div className="flex items-center justify-between p-4 z-[100] w-full absolute ">

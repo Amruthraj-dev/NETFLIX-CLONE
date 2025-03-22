@@ -5,11 +5,15 @@ import { db } from "../firebase";
 import { updateDoc, doc, onSnapshot } from "firebase/firestore";
 import { AiOutlineClose } from "react-icons/ai";
 import { motion } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
+import back_arrow from "../assets/back_arrow_icon.png";
 
 const SavedShows = () => {
   const [movies, setMovies] = useState([]);
 
   const { user } = UserAuth();
+
+  const navigate = useNavigate()
 
   const slideLeft = () => {
     var slider = document.getElementById("slider");
@@ -42,6 +46,12 @@ const SavedShows = () => {
   return (
     <>
       <h2 className="text-white font-bold md:text-xl p-4">My Shows</h2>
+      <img
+        className="absolute w-12 top-5 left-5 cursor-pointer"
+        onClick={() => navigate("/")}
+        src={back_arrow}
+        alt="back_arrow"
+      />
 
       <div className="relative flex items-center group">
         <MdChevronLeft
@@ -60,7 +70,7 @@ const SavedShows = () => {
               className="w-[160px] sm:w-[200px] md:w-[240px] lg:w-[280px] inline-block cursor-pointer relative p-2"
             >
               <div className="relative overflow-hidden w-[160px] sm:w-[200px] md:w-[240px] lg:w-[280px] inline-block cursor-pointer p-2">
-                <motion.img
+                    <Link to={`/player/${item.id}`}> <motion.img
                   whileHover={{ scale: 1.4 }}
                   onHoverStart={(e) => {}}
                   onHoverEnd={(e) => {}}
@@ -68,6 +78,7 @@ const SavedShows = () => {
                   src={`https://image.tmdb.org/t/p/w500/${item?.img}`}
                   alt={item?.title}
                 />
+                </Link>
               </div>
 
               {/* Title is positioned at the bottom of the image and is always visible */}
