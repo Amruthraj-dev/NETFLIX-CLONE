@@ -17,7 +17,7 @@ const Login = () => {
     setError("");
     try {
       await logIn(email, password);
-      navigate("/");
+      navigate("/home");
     } catch (err) {
       setError(err.message.split("/")[1].split("-") .join(" ")); 
     }

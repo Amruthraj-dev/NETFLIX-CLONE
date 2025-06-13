@@ -36,7 +36,7 @@ const Player = () => {
     <div className="h-[100vh] flex flex-col justify-center items-center ">
       <img
         className="absolute w-12 top-5 left-5 cursor-pointer"
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/home")}
         src={back_arrow}
         alt="back_arrow"
       />

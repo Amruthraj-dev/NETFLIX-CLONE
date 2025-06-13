@@ -7,18 +7,17 @@ import SignUp from "./pages/SignUp";
 import Account from "./pages/Account";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Player from "./components/player";
-
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
     <>
-      
       <AuthContextProvider>
-       
+        <ToastContainer position="top-right" autoClose={3000} />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/signup" element={<SignUp />} />
           <Route
             path="/account"
@@ -28,7 +27,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/player/:id" element={<Player/>} />
+          <Route path="/player/:id" element={<Player />} />
         </Routes>
       </AuthContextProvider>
     </>

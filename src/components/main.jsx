@@ -1,25 +1,46 @@
 import React, { useEffect, useRef, useState } from "react";
-import requests from "../requests";
 import axios from "axios";
-// import { BiMehAlt } from "react-icons/bi";
+import requests from "../requests";
+import { Link } from "react-router-dom";
+import { db } from "../firebase";
+import { arrayUnion, arrayRemove, doc, updateDoc, getDoc } from "firebase/firestore";
+import { UserAuth } from "../context/AuthContext";
 
 const Main = () => {
-  const [movies, setmovies] = useState([]);
+  const [movies, setMovies] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const { user } = UserAuth();
+  const [savedMovieIds, setSavedMovieIds] = useState([]);
+
   const carouselRef = useRef(null);
   const intervalRef = useRef(null);
 
   useEffect(() => {
-    startAutoPlay();
-    return () => stopAutoPlay();
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(requests.Popular);
+        const result = response.data.results.filter(
+          (movie) => movie.backdrop_path !== ""
+        );
+        setMovies(result);
+      } catch (e) {
+        console.error("Failed to fetch movies:", e);
+      }
+    };
+    fetchData();
   }, []);
+
+  useEffect(() => {
+    startAutoPlay();
+    return stopAutoPlay;
+  }, [movies]);
 
   const startAutoPlay = () => {
     intervalRef.current = setInterval(() => {
       setCurrentIndex((prevIndex) =>
         prevIndex === movies.length - 1 ? 0 : prevIndex + 1
       );
-    }, 5000);
+    }, 3000);
   };
 
   const stopAutoPlay = () => {
@@ -27,76 +48,94 @@ const Main = () => {
   };
 
   useEffect(() => {
-    if (carouselRef.current) {
-      carouselRef.current.scrollTo({
-        left: currentIndex * 320,
-        Behaviour: "auto",
-      });
-    }
-  });
-
-  useEffect(() => {
-    const fetchdata = async () => {
-      try {
-        const response = await axios.get(requests.Popular);
-        const result = await response.data.results;
-
-        const filteredMovies = result.filter(
-          (movie) => movie.backdrop_path !== ""
-        );
-        setmovies(filteredMovies);
-        console.log(result, "movies");
-      } catch (e) {
-        console.error(e, "error");
+    const fetchSavedMovies = async () => {
+      if (user?.email) {
+        const docRef = doc(db, "users", user.email);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const saved = docSnap.data()?.savedShows || [];
+          const ids = saved.map((movie) => movie.id);
+          setSavedMovieIds(ids);
+        }
       }
     };
-    fetchdata();
-  }, []);
+    fetchSavedMovies();
+  }, [user]);
 
-  const movie = movies[Math.floor(Math.random() * movies.length)];
-  console.log(movie, "random movie");
+  const toggleSaveMovie = async (movie) => {
+    if (!user?.email) {
+      alert("Please log in to save movies");
+      return;
+    }
+
+    const movieRef = doc(db, "users", user.email);
+    const movieData = {
+      id: movie.id,
+      title: movie.title,
+      img: movie.backdrop_path,
+    };
+
+    let updatedIds;
+
+    if (savedMovieIds.includes(movie.id)) {
+      await updateDoc(movieRef, {
+        savedShows: arrayRemove(movieData),
+      });
+      updatedIds = savedMovieIds.filter((id) => id !== movie.id);
+    } else {
+      await updateDoc(movieRef, {
+        savedShows: arrayUnion(movieData),
+      });
+      updatedIds = [...savedMovieIds, movie.id];
+    }
+
+    setSavedMovieIds(updatedIds);
+  };
 
   const truncate = (str, num) => {
-    if (str?.length > num) {
-      return str.slice(0, num) + "...";
-    } else {
-      return str;
-    }
+    return str?.length > num ? str.slice(0, num) + "..." : str;
   };
+
+  const movie = movies[currentIndex];
 
   return (
     <>
       <div
         ref={carouselRef}
-        className="flex overflow-hidden scroll-smooth snap-x snap-mandatory space-x-4 mb-8"
+        className="w-screen h-screen relative text-white overflow-hidden"
       >
-        <div className="w-full h-[550px] text-white">
-          <div className="w-full h-full">
-            <div className="absolute w-full h-[550px] bg-gradient-to-r from-black"></div>
-            <img
-              className="w-full h-full object-cover"
-              src={`https://image.tmdb.org/t/p/original${movie?.backdrop_path}`}
-              alt=""
-            />
-            <div className="absolute w-full top-[40%] md:top-[25%] lg:top-[25%] xl:top-[30%] p-4 md:p-6 lg:p-8">
-              <h1 className="text-3xl md:text-5xl font-bold my-4">
-                {movie?.title}
-              </h1>
-              <p className="text-gray-400 text-sm">
-                Released : {movie?.release_date}
-              </p>
-              <p className="hidden md:block w-full md:max-w-[70%]  lg:max-w-[50%] xl:max-w-[35%] text-gray-200">
-                {truncate(movie?.overview, 120)}
-              </p>
-              <div className="my-4">
-                <button className="border bg-gray-300 text-black border-gray-300 px-5 py-2">
-                  Play
-                </button>
-                <button className="border  text-white border-gray-300 px-5 py-2 ml-4">
-                  Watch Later
-                </button>
-              </div>
-            </div>
+        <div className="absolute w-full h-full bg-gradient-to-r from-black z-10"></div>
+        <img
+          className="w-full h-full object-cover absolute top-0 left-0"
+          src={`https://image.tmdb.org/t/p/original${movie?.backdrop_path}`}
+          alt={movie?.title}
+        />
+        <div className="absolute z-20 w-full h-full flex flex-col justify-start mt-[50vh] px-4 md:px-8">
+          <h1 className="text-3xl md:text-5xl font-bold my-4">
+            {movie?.title}
+          </h1>
+          <p className="text-gray-300 text-sm mb-2">
+            Released: {movie?.release_date}
+          </p>
+          <p className="hidden md:block md:max-w-[70%] lg:max-w-[50%] xl:max-w-[35%] text-gray-200">
+            {truncate(movie?.overview, 150)}
+          </p>
+          <div className="mt-6 flex gap-4">
+            <Link to={`/player/${movie?.id}`}>
+              <button className="bg-gray-300 text-black px-5 py-2 font-semibold">
+                Play
+              </button>
+            </Link>
+            <button
+              onClick={() => toggleSaveMovie(movie)}
+              className={`px-5 py-2 font-semibold border ${
+                savedMovieIds.includes(movie?.id)
+                  ? "text-white  border-gray-300"
+                  : "text-white border-gray-300"
+              }`}
+            >
+              {savedMovieIds.includes(movie?.id) ? "✔ Saved" : "Watch Later"}
+            </button>
           </div>
         </div>
       </div>

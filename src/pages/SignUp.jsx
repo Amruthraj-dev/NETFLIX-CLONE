@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
 import netflix_spinner from "../assets/netflix_spinner.gif";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -14,20 +15,40 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true)
-    if (password.length >= 8) {
-      setError(""); 
+    
 
-      try {
-        await signUp(email, password);
-        navigate("/");
-      } catch (error) {
-        setError(error.message); 
-      }
+  try {
+  const result = await signUp(email, password);
 
-    } else {
-      setError("Password length should be at least 8 characters");
+  if (result.success) {
+    toast.success("Signup successful!");
+    setTimeout(() => {
+      navigate("/");
+      setLoading(false);
+    }, 1000);
+  } else {
+    switch (result.code) {
+      case "auth/email-already-in-use":
+        toast.error("This email is already registered.");
+        break;
+      case "auth/invalid-email":
+        toast.error("Invalid email address.");
+        break;
+      case "auth/weak-password":
+        toast.error("Password should be at least 8 characters.");
+        break;
+      default:
+        toast.error("Signup failed. Please try again.");
     }
-    setLoading(false)
+    setLoading(false);
+  }
+} catch (error) {
+  toast.error("Something went wrong during signup.");
+  setLoading(false);
+}
+
+    
+  
   };
 
   return (loading ? (
@@ -81,7 +102,7 @@ const SignUp = () => {
                 <span className="text-gray-600">
                   Already subscribed to Netflix?
                 </span>{" "}
-                <Link to="/login">Sign In</Link>
+                <Link to="/">Sign In</Link>
               </p>
             </form>
           </div>

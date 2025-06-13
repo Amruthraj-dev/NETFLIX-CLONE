@@ -29,7 +29,7 @@ const SavedShows = () => {
       const unsub = onSnapshot(doc(db, "users", `${user.email}`), (doc) => {
         setMovies(doc.data()?.savedShows || []);
       });
-      return () => unsub(); // Cleanup the listener when component unmounts
+      return () => unsub(); 
     }
   }, [user?.email]);
 
@@ -48,7 +48,7 @@ const SavedShows = () => {
       <h2 className="text-white font-bold md:text-xl p-4">My Shows</h2>
       <img
         className="absolute w-12 top-5 left-5 cursor-pointer"
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/home")}
         src={back_arrow}
         alt="back_arrow"
       />
